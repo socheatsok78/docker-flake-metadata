@@ -1,0 +1,26 @@
+name: Docker Nix Flake Metadata
+description: GitHub Action to extract Nix Flake metadata (tags, labels) for Docker
+inputs:
+  source:
+    description: The source of the flake, can be a URL or a local path.
+    default: "github:${{ github.repository }}/${{ github.ref_name }}"
+    required: false
+  images:
+    description: List of Docker images to use as base name for tags
+    required: true
+  github-token:
+    description: GitHub token for authentication.
+    default: ${{ github.token }}
+  runner:
+    description: DO NOT USE. This is an internal input for the GitHub Action runner context.
+    default: ${{ toJson(runner) }}
+outputs:
+  bake-file:
+    description: The generated Docker bake file with tags and labels.
+runs:
+  using: docker
+  image: docker://ghcr.io/socheatsok78/docker-flake-metadata
+  env:
+    DOCKER_FLAKE_METADATA_SRC: ${{ inputs.source }}
+    DOCKER_FLAKE_METADATA_IMAGES: ${{ inputs.images }}
+    GITHUB_TOKEN: ${{ inputs.github-token }}

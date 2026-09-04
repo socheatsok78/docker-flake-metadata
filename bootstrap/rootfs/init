@@ -1,0 +1,27 @@
+#!/usr/bin/env nix
+#! nix shell --file ``<nixpkgs>`` jq --command bash
+set -euo pipefail
+
+ME=docker-flake-metadata
+
+github.setoutput() {
+	echo "$1=$2" >> "$GITHUB_OUTPUT"
+}
+nix.setopt() {
+	echo "$1 = $2" >> /etc/nix/nix.conf
+}
+log() {
+	printf '## [%s] %s\n' "$ME" "$*" >&2
+}
+
+if [[ -n "${GITHUB_TOKEN}" ]]; then
+	log "Setting up GitHub token for authentication..."
+	nix.setopt "access-tokens" "github.com=${GITHUB_TOKEN}"
+fi
+
+DOCKER_FLAKE_METADATA_FILE=$(mktemp "${RUNNER_TEMP}/docker-flake-metadata.XXXXXX")
+/docker-flake-metadata.sh "$@" | tee "$DOCKER_FLAKE_METADATA_FILE"
+
+log "Setting output variable for GitHub Actions"
+log "- bake-file=${DOCKER_FLAKE_METADATA_FILE}"
+github.setoutput "bake-file" "$DOCKER_FLAKE_METADATA_FILE"

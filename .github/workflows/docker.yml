@@ -1,0 +1,37 @@
+name: Docker
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker:
+    uses: socheatsok78/uses/.github/workflows/docker-buildx-nix.yml@main
+    permissions:
+      contents: read
+      packages: write
+    with:
+      permit-login: ${{ github.event_name != 'pull_request' }}
+      permit-push: ${{ github.event_name != 'pull_request' }}
+      permit-cache: ${{ github.event_name != 'pull_request' }}
+
+  test:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: socheatsok78/gha-debug-docker@main
+
+      - name: Docker Nix Flake Metadata
+        uses: ./
+        with:
+          images: |
+            docker.io/fakerepo
+            ghcr.io/fakerepo
