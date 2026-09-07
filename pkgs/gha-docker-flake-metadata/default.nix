@@ -12,9 +12,11 @@ writeShellApplication {
   ];
   text = ''
     ME=docker-flake-metadata
+    RUNNER_TEMP=''${RUNNER_TEMP:-/tmp}
+    GITHUB_OUTPUT="''${GITHUB_OUTPUT:-''${RUNNER_TEMP}/github-output}"
 
     github.setoutput() {
-        echo "$1=$2" >> "''${GITHUB_OUTPUT:-''${RUNNER_TEMP}/github-output}"
+        echo "$1=$2" >> "''${GITHUB_OUTPUT}"
     }
     nix.setopt() {
         echo "$1 = $2" >> /etc/nix/nix.conf
@@ -33,7 +35,6 @@ writeShellApplication {
         nix.setopt "access-tokens" "github.com=''${GITHUB_TOKEN}"
     fi
 
-    RUNNER_TEMP=''${RUNNER_TEMP:-/tmp}
     DOCKER_FLAKE_METADATA_KEY=$(mktemp --dry-run "docker-flake-metadata.XXXXXX")
     DOCKER_FLAKE_METADATA_TEMP="''${RUNNER_TEMP}/''${DOCKER_FLAKE_METADATA_KEY}"
     DOCKER_FLAKE_METADATA_FILE="''${DOCKER_FLAKE_METADATA_TEMP}/docker-flake-metadata.json"
