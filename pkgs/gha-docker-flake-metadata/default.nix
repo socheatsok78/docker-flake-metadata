@@ -23,6 +23,11 @@ writeShellApplication {
         printf '## [%s] %s\n' "$ME" "$*" >&2
     }
 
+    if [[ -z "''${GITHUB_ACTIONS:-}" ]]; then
+        log "This script is intended to be run in a GitHub Actions environment."
+        exit 1
+    fi
+
     if [[ -n "''${GITHUB_TOKEN}" ]]; then
         log "Setting up GitHub token for authentication..."
         nix.setopt "access-tokens" "github.com=''${GITHUB_TOKEN}"
