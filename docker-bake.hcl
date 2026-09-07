@@ -6,6 +6,7 @@ variable "GITHUB_REPOSITORY" {
 }
 target "default" {
     dockerfile = "flake.nix"
+    target = "docker-flake-metadata-image"
     platforms = [
         "linux/amd64",
         "linux/arm64",
