@@ -30,7 +30,7 @@ writeShellApplication {
         exit 1
     fi
 
-    if [[ -n "''${GITHUB_TOKEN}" ]]; then
+    if [[ -n "''${GITHUB_TOKEN:-}" ]]; then
         log "Setting up GitHub token for authentication..."
         nix.setopt "access-tokens" "github.com=''${GITHUB_TOKEN}"
     fi
