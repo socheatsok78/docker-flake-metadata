@@ -58,7 +58,7 @@ writeShellApplication {
         docker-buildx bake -f "''${DOCKER_FLAKE_METADATA_FILE}" -f - '*' --print | jq -r 'del(.group)'
     }
 
-    nix-experimental flake show "''${DOCKER_FLAKE_METADATA_SRC}" --json 2>/dev/null \
+    nix-experimental flake show "''${DOCKER_FLAKE_METADATA_SRC}" --json --all-systems 2>/dev/null \
         | flake-to-bake-targets \
         | docker-flake-metadata
   '';
