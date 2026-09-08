@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.hcl": "dockerbake",
+        "flake.lock": "json",
+    }
+}
