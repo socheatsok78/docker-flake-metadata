@@ -5,6 +5,12 @@ variable "DOCKER_FLAKE_METADATA_IMAGES" {
 	default = ""
 	type = string
 }
+
+variable "DOCKER_FLAKE_METADATA_TRAILING" {
+	default = "/"
+	type = string
+}
+
 variable "_images" {
 	type = list(string)
 	default = [for image in split(",", trim(replace(DOCKER_FLAKE_METADATA_IMAGES, "\n", ","), ",")) : trimspace(image)]
@@ -12,5 +18,5 @@ variable "_images" {
 
 function "tags" {
 	params = [ name, tag ]
-	result = [for image in _images : "${image != "" ? "${image}/" : ""}${name}:${tag}"]
+	result = [for image in _images : "${image != "" ? "${image}${DOCKER_FLAKE_METADATA_TRAILING}" : ""}${name}:${tag}"]
 }

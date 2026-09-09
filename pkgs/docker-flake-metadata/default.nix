@@ -22,6 +22,7 @@ writeShellApplication {
   text = ''
     export DOCKER_FLAKE_METADATA_SRC="''${1:-''${DOCKER_FLAKE_METADATA_SRC:-}}"
     export DOCKER_FLAKE_METADATA_IMAGES="''${DOCKER_FLAKE_METADATA_IMAGES:-}"
+    export DOCKER_FLAKE_METADATA_TRAILING="''${DOCKER_FLAKE_METADATA_TRAILING:-}"
     DOCKER_FLAKE_METADATA_FILE="${dockerFlakeMetadataHcl}/docker-flake-metadata.hcl"
 
     function nix-experimental() {

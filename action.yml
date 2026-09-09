@@ -8,6 +8,10 @@ inputs:
   images:
     description: List of Docker images to use as base name for tags
     required: true
+  trailing:
+    description: Change the trailing slash for the Docker image tags.
+    required: false
+    default: "/"
   github-token:
     description: GitHub token for authentication.
     default: ${{ github.token }}
@@ -23,4 +27,5 @@ runs:
   env:
     DOCKER_FLAKE_METADATA_SRC: ${{ inputs.source }}
     DOCKER_FLAKE_METADATA_IMAGES: ${{ inputs.images }}
+    DOCKER_FLAKE_METADATA_TRAILING: ${{ inputs.trailing }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
